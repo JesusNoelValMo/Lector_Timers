@@ -4,7 +4,8 @@ Module1=Starter
 Build1=Default,b4a.example
 ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.b4x.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="19"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
 IconFile=
-NumberOfFiles=0
+NumberOfFiles=1
+File1=Main_Layout.bal
 NumberOfLibraries=1
 Library1=core
 @EndOfDesignText@
@@ -31,12 +32,16 @@ End Sub
 Sub Globals
 	'These global variables will be redeclared each time the activity is created.
 	'These variables can only be accessed from this module.
+	Dim Timer_1, Timer_2, Timer_3, Timer_4, Timer_5, Timer_6, Timer_7, Timer_8, Timer_9, Timer_10, Timer_11, Timer_12, Timer_13, Timer_14 As Label
+	Dim Timer_15, Timer_16, Timer_17, Timer_18, Timer_19, Timer_20, Timer_21, Timer_22 As Label
+	Dim EditText1 As EditText
+	
 
 End Sub
 
 Sub Activity_Create(FirstTime As Boolean)
 	'Do not forget to load the layout file created with the visual designer. For example:
-	'Activity.LoadLayout("Layout1")
+	Activity.LoadLayout("Main_Layout")
 
 End Sub
 
@@ -46,4 +51,11 @@ End Sub
 
 Sub Activity_Pause (UserClosed As Boolean)
 
+End Sub
+
+
+Sub Label_Click
+	Dim lbl_tag As Label
+	lbl_tag = Sender
+	lbl_tag.Text = lbl_tag.Tag
 End Sub
