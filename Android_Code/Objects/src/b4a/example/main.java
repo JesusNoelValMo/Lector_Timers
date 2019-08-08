@@ -25,7 +25,7 @@ public class main extends Activity implements B4AActivity{
     ActivityWrapper _activity;
     java.util.ArrayList<B4AMenuItem> menuItems;
 	public static final boolean fullScreen = false;
-	public static final boolean includeTitle = true;
+	public static final boolean includeTitle = false;
     public static WeakReference<Activity> previousOne;
 
 	@Override
@@ -309,6 +309,10 @@ public class main extends Activity implements B4AActivity{
 	}
 
 public anywheresoftware.b4a.keywords.Common __c = null;
+public static anywheresoftware.b4a.agraham.byteconverter.ByteConverter _conv = null;
+public static anywheresoftware.b4a.objects.UsbSerial _usb = null;
+public static anywheresoftware.b4a.randomaccessfile.AsyncStreams _astreams = null;
+public static String _mensaje_out = "";
 public anywheresoftware.b4a.objects.LabelWrapper _timer_1 = null;
 public anywheresoftware.b4a.objects.LabelWrapper _timer_2 = null;
 public anywheresoftware.b4a.objects.LabelWrapper _timer_3 = null;
@@ -339,25 +343,71 @@ public static boolean isAnyActivityVisible() {
 vis = vis | (main.mostCurrent != null);
 return vis;}
 public static String  _activity_create(boolean _firsttime) throws Exception{
- //BA.debugLineNum = 31;BA.debugLine="Sub Activity_Create(FirstTime As Boolean)";
- //BA.debugLineNum = 33;BA.debugLine="Activity.LoadLayout(\"Main_Layout\")";
+int _dev = 0;
+ //BA.debugLineNum = 37;BA.debugLine="Sub Activity_Create(FirstTime As Boolean)";
+ //BA.debugLineNum = 57;BA.debugLine="Activity.LoadLayout(\"Main_Layout\")";
 mostCurrent._activity.LoadLayout("Main_Layout",mostCurrent.activityBA);
- //BA.debugLineNum = 35;BA.debugLine="End Sub";
+ //BA.debugLineNum = 58;BA.debugLine="If (usb.HasPermission(1)) Then	' Ver_2.4";
+if ((_usb.HasPermission((int) (1)))) { 
+ //BA.debugLineNum = 60;BA.debugLine="Dim dev As Int";
+_dev = 0;
+ //BA.debugLineNum = 63;BA.debugLine="dev = usb.Open(115200, 1)		' Ver_2.4";
+_dev = _usb.Open(processBA,(int) (115200),(int) (1));
+ //BA.debugLineNum = 67;BA.debugLine="If dev <> usb.USB_NONE Then";
+if (_dev!=_usb.USB_NONE) { 
+ //BA.debugLineNum = 72;BA.debugLine="astreams.Initialize(usb.GetInputStream,usb.Get";
+_astreams.Initialize(processBA,_usb.GetInputStream(),_usb.GetOutputStream(),"Astreams");
+ }else {
+ //BA.debugLineNum = 74;BA.debugLine="Log(\"Error opening USB port 1\")";
+anywheresoftware.b4a.keywords.Common.Log("Error opening USB port 1");
+ };
+ }else {
+ //BA.debugLineNum = 77;BA.debugLine="usb.RequestPermission(1)  ' Ver_2.4";
+_usb.RequestPermission((int) (1));
+ };
+ //BA.debugLineNum = 80;BA.debugLine="End Sub";
 return "";
 }
 public static String  _activity_pause(boolean _userclosed) throws Exception{
- //BA.debugLineNum = 41;BA.debugLine="Sub Activity_Pause (UserClosed As Boolean)";
- //BA.debugLineNum = 43;BA.debugLine="End Sub";
+ //BA.debugLineNum = 91;BA.debugLine="Sub Activity_Pause (UserClosed As Boolean)";
+ //BA.debugLineNum = 93;BA.debugLine="End Sub";
 return "";
 }
 public static String  _activity_resume() throws Exception{
- //BA.debugLineNum = 37;BA.debugLine="Sub Activity_Resume";
- //BA.debugLineNum = 39;BA.debugLine="End Sub";
+ //BA.debugLineNum = 87;BA.debugLine="Sub Activity_Resume";
+ //BA.debugLineNum = 89;BA.debugLine="End Sub";
+return "";
+}
+public static String  _astreams_newdata(byte[] _buffer) throws Exception{
+String _command = "";
+int _pos_box = 0;
+boolean _bandera = false;
+ //BA.debugLineNum = 108;BA.debugLine="Sub Astreams_NewData (Buffer() As Byte)";
+ //BA.debugLineNum = 109;BA.debugLine="Dim command As String";
+_command = "";
+ //BA.debugLineNum = 110;BA.debugLine="Dim Pos_Box As Int";
+_pos_box = 0;
+ //BA.debugLineNum = 111;BA.debugLine="Dim bandera As Boolean";
+_bandera = false;
+ //BA.debugLineNum = 113;BA.debugLine="command =conv.StringFromBytes(Buffer, \"UTF8\")";
+_command = _conv.StringFromBytes(_buffer,"UTF8");
+ //BA.debugLineNum = 114;BA.debugLine="Msgbox(command,\"LOL\")";
+anywheresoftware.b4a.keywords.Common.Msgbox(_command,"LOL",mostCurrent.activityBA);
+ //BA.debugLineNum = 116;BA.debugLine="End Sub";
+return "";
+}
+public static String  _button1_click() throws Exception{
+ //BA.debugLineNum = 103;BA.debugLine="Sub Button1_Click";
+ //BA.debugLineNum = 105;BA.debugLine="mensaje_Out=\"a\"";
+_mensaje_out = "a";
+ //BA.debugLineNum = 106;BA.debugLine="Write_In_Arduino(mensaje_Out)";
+_write_in_arduino(_mensaje_out);
+ //BA.debugLineNum = 107;BA.debugLine="End Sub";
 return "";
 }
 public static String  _globals() throws Exception{
- //BA.debugLineNum = 21;BA.debugLine="Sub Globals";
- //BA.debugLineNum = 24;BA.debugLine="Dim Timer_1, Timer_2, Timer_3, Timer_4, Timer_5,";
+ //BA.debugLineNum = 27;BA.debugLine="Sub Globals";
+ //BA.debugLineNum = 30;BA.debugLine="Dim Timer_1, Timer_2, Timer_3, Timer_4, Timer_5,";
 mostCurrent._timer_1 = new anywheresoftware.b4a.objects.LabelWrapper();
 mostCurrent._timer_2 = new anywheresoftware.b4a.objects.LabelWrapper();
 mostCurrent._timer_3 = new anywheresoftware.b4a.objects.LabelWrapper();
@@ -372,7 +422,7 @@ mostCurrent._timer_11 = new anywheresoftware.b4a.objects.LabelWrapper();
 mostCurrent._timer_12 = new anywheresoftware.b4a.objects.LabelWrapper();
 mostCurrent._timer_13 = new anywheresoftware.b4a.objects.LabelWrapper();
 mostCurrent._timer_14 = new anywheresoftware.b4a.objects.LabelWrapper();
- //BA.debugLineNum = 25;BA.debugLine="Dim Timer_15, Timer_16, Timer_17, Timer_18, Timer";
+ //BA.debugLineNum = 31;BA.debugLine="Dim Timer_15, Timer_16, Timer_17, Timer_18, Timer";
 mostCurrent._timer_15 = new anywheresoftware.b4a.objects.LabelWrapper();
 mostCurrent._timer_16 = new anywheresoftware.b4a.objects.LabelWrapper();
 mostCurrent._timer_17 = new anywheresoftware.b4a.objects.LabelWrapper();
@@ -381,21 +431,21 @@ mostCurrent._timer_19 = new anywheresoftware.b4a.objects.LabelWrapper();
 mostCurrent._timer_20 = new anywheresoftware.b4a.objects.LabelWrapper();
 mostCurrent._timer_21 = new anywheresoftware.b4a.objects.LabelWrapper();
 mostCurrent._timer_22 = new anywheresoftware.b4a.objects.LabelWrapper();
- //BA.debugLineNum = 26;BA.debugLine="Dim EditText1 As EditText";
+ //BA.debugLineNum = 32;BA.debugLine="Dim EditText1 As EditText";
 mostCurrent._edittext1 = new anywheresoftware.b4a.objects.EditTextWrapper();
- //BA.debugLineNum = 29;BA.debugLine="End Sub";
+ //BA.debugLineNum = 35;BA.debugLine="End Sub";
 return "";
 }
 public static String  _label_click() throws Exception{
 anywheresoftware.b4a.objects.LabelWrapper _lbl_tag = null;
- //BA.debugLineNum = 46;BA.debugLine="Sub Label_Click";
- //BA.debugLineNum = 47;BA.debugLine="Dim lbl_tag As Label";
+ //BA.debugLineNum = 96;BA.debugLine="Sub Label_Click";
+ //BA.debugLineNum = 97;BA.debugLine="Dim lbl_tag As Label";
 _lbl_tag = new anywheresoftware.b4a.objects.LabelWrapper();
- //BA.debugLineNum = 48;BA.debugLine="lbl_tag = Sender";
+ //BA.debugLineNum = 98;BA.debugLine="lbl_tag = Sender";
 _lbl_tag.setObject((android.widget.TextView)(anywheresoftware.b4a.keywords.Common.Sender(mostCurrent.activityBA)));
- //BA.debugLineNum = 49;BA.debugLine="lbl_tag.Text = lbl_tag.Tag";
+ //BA.debugLineNum = 99;BA.debugLine="lbl_tag.Text = lbl_tag.Tag";
 _lbl_tag.setText(_lbl_tag.getTag());
- //BA.debugLineNum = 50;BA.debugLine="End Sub";
+ //BA.debugLineNum = 100;BA.debugLine="End Sub";
 return "";
 }
 
@@ -413,7 +463,24 @@ starter._process_globals();
     }
 }public static String  _process_globals() throws Exception{
  //BA.debugLineNum = 15;BA.debugLine="Sub Process_Globals";
- //BA.debugLineNum = 19;BA.debugLine="End Sub";
+ //BA.debugLineNum = 18;BA.debugLine="Dim conv As ByteConverter";
+_conv = new anywheresoftware.b4a.agraham.byteconverter.ByteConverter();
+ //BA.debugLineNum = 19;BA.debugLine="Dim usb As UsbSerial";
+_usb = new anywheresoftware.b4a.objects.UsbSerial();
+ //BA.debugLineNum = 20;BA.debugLine="Dim astreams As AsyncStreams";
+_astreams = new anywheresoftware.b4a.randomaccessfile.AsyncStreams();
+ //BA.debugLineNum = 21;BA.debugLine="Dim mensaje_Out As String";
+_mensaje_out = "";
+ //BA.debugLineNum = 25;BA.debugLine="End Sub";
+return "";
+}
+public static String  _write_in_arduino(String _ms) throws Exception{
+ //BA.debugLineNum = 82;BA.debugLine="Sub Write_In_Arduino (Ms As String)";
+ //BA.debugLineNum = 83;BA.debugLine="Ms = mensaje_Out";
+_ms = _mensaje_out;
+ //BA.debugLineNum = 84;BA.debugLine="astreams.Write(Ms.GetBytes(\"UTF8\"))";
+_astreams.Write(_ms.getBytes("UTF8"));
+ //BA.debugLineNum = 85;BA.debugLine="End Sub";
 return "";
 }
 }

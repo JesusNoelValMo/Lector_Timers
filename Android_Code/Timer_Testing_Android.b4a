@@ -2,12 +2,22 @@
 NumberOfModules=1
 Module1=Starter
 Build1=Default,b4a.example
-ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.b4x.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="19"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.b4x.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="19"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~AddActivityText(main, <intent-filter>~\n~        <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />~\n~    </intent-filter>~\n~	<meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"~\n~        android:resource="@xml/device_filter" />)~\n~
 IconFile=
-NumberOfFiles=1
-File1=Main_Layout.bal
-NumberOfLibraries=1
+NumberOfFiles=7
+File1=arial.ttf
+File2=DSEG7Classic-Bold.ttf
+File3=DSEG7Classic-BoldItalic.ttf
+File4=DSEG7Classic-Italic.ttf
+File5=DSEG7Classic-Light.ttf
+File6=DSEG7Classic-LightItalic.ttf
+File7=Main_Layout.bal
+NumberOfLibraries=5
 Library1=core
+Library2=usbserial
+Library3=byteconverter
+Library4=randomaccessfile
+Library5=stringutils
 @EndOfDesignText@
 #Region  Project Attributes 
 	#ApplicationLabel: B4A Example
@@ -20,13 +30,19 @@ Library1=core
 
 #Region  Activity Attributes 
 	#FullScreen: False
-	#IncludeTitle: True
+	#IncludeTitle: false
 #End Region
 
 Sub Process_Globals
 	'These global variables will be declared once when the application starts.
 	'These variables can be accessed from all modules.
-
+	Dim conv As ByteConverter
+	Dim usb As UsbSerial
+	Dim astreams As AsyncStreams
+		Dim mensaje_Out As String
+	'Declare font variables
+'Dim DSEG7Clasic_Bold As Typeface
+'DSEG7Clasic_Bold = Typeface.LoadFromAssets("arial.ttf")
 End Sub
 
 Sub Globals
@@ -40,9 +56,53 @@ Sub Globals
 End Sub
 
 Sub Activity_Create(FirstTime As Boolean)
+
+''==APPLY TO ALL LABELS, EDITTEXTS, BUTTONS, CHECKBOXES, RADIOBUTTONS AND TOGGLEBUTTONS
+'For Each v As View In Activity.GetAllViewsRecursive
+'  If v Is Label Then
+'    Dim lbl As Label = v
+'    lbl.Typeface = DSEG7Clasic_Bold
+'  End If
+'Next
+
+
+
+
+
+
+
+
+	
+	
 	'Do not forget to load the layout file created with the visual designer. For example:
 	Activity.LoadLayout("Main_Layout")
+	If (usb.HasPermission(1)) Then	' Ver_2.4
+		'Msgbox(usb1.DeviceInfo(1), "Device Information 1")	' Ver_2.4
+		Dim dev As Int
+		'dev = usb.Open(115200, 1)		' Ver_2.4
+		
+		dev = usb.Open(115200, 1)		' Ver_2.4
+		''Msgbox(usb.UsbPresent(1),"AS")	'
+	
+		
+		If dev <> usb.USB_NONE Then
+			'Log("Connected successfully! 1")
+			'btnOpen.Enabled = False
+			'btnClose.Enabled = True
+			'btnSend.Enabled = True			
+			 astreams.Initialize(usb.GetInputStream,usb.GetOutputStream,"Astreams")
+		Else
+			Log("Error opening USB port 1")
+		End If
+	Else
+		usb.RequestPermission(1)  ' Ver_2.4
+	End If
 
+End Sub
+
+Sub Write_In_Arduino (Ms As String)
+	Ms = mensaje_Out
+	astreams.Write(Ms.GetBytes("UTF8"))
 End Sub
 
 Sub Activity_Resume
@@ -58,4 +118,20 @@ Sub Label_Click
 	Dim lbl_tag As Label
 	lbl_tag = Sender
 	lbl_tag.Text = lbl_tag.Tag
+End Sub
+
+
+Sub Button1_Click
+	
+	mensaje_Out="a"
+	Write_In_Arduino(mensaje_Out)
+End Sub
+Sub Astreams_NewData (Buffer() As Byte)
+	Dim command As String
+	Dim Pos_Box As Int
+	Dim bandera As Boolean
+	''Se convierte la informacion recibida a UTF8
+	command =conv.StringFromBytes(Buffer, "UTF8")
+	Msgbox(command,"LOL")
+
 End Sub

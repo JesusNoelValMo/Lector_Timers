@@ -6,12 +6,11 @@ int Trigger_Test_Pin_2 = 3;
 int Group1_PinTimerDev[11] = {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32};
 int Group2_PinTimerDev[11] = {33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43};
 boolean is_finished[11];
-
+boolean is_finished2[11];
 class Timer_device
 {
   private:
     //cuenta en seg o mseg
-    
     boolean Pin_Timer_Status;
     unsigned long NextTimeToCheck = 0;
   public:
@@ -66,9 +65,7 @@ void setup() {
   Serial.begin(115200);
 }
 void loop() {
- //Serial.println(digitalRead(Trigger_Test_Pin_1));
   if(digitalRead(Trigger_Test_Pin_1) == true){
-  //  Serial.println("Test Group 1:");
     for(i = 0; i <= 10; i++){
       if (is_finished[i] == false){
         TDevices1[i].Read_n_sum_count(Group1_PinTimerDev[i], 1000, i); 
@@ -78,10 +75,10 @@ void loop() {
   else{
     for(i = 0; i <= 10; i++){
        TDevices1[i].count = 0;
+       is_finished[i] = false;
     }
   }
   if(digitalRead(Trigger_Test_Pin_2) == true){
-   // Serial.println("Test Group 2:");
     for(i = 0; i <= 10; i++){
       if (is_finished[i] == false){
         TDevices2[i].Read_n_sum_count(Group2_PinTimerDev[i], 1000, i); 
@@ -91,8 +88,9 @@ void loop() {
   else{
     for(i = 0; i <= 10; i++){
        TDevices2[i].count = 0;
+       is_finished[i] = false;
        
     }
   }
-  //delay(100);
+  //Serial.print("ASD");
 }
