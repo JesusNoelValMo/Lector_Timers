@@ -4,14 +4,19 @@ Module1=Starter
 Build1=Default,b4a.example
 ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: http://www.b4x.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="19"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~'End of default text.~\n~AddActivityText(main, <intent-filter>~\n~        <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />~\n~    </intent-filter>~\n~	<meta-data android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"~\n~        android:resource="@xml/device_filter" />)~\n~
 IconFile=
-NumberOfFiles=7
-File1=arial.ttf
+NumberOfFiles=12
+File1=dseg77seggchan-regular.ttf
 File2=DSEG7Classic-Bold.ttf
 File3=DSEG7Classic-BoldItalic.ttf
 File4=DSEG7Classic-Italic.ttf
 File5=DSEG7Classic-Light.ttf
 File6=DSEG7Classic-LightItalic.ttf
-File7=Main_Layout.bal
+File7=dseg7classic-regular.ttf
+File8=dseg7classic-regularitalic.ttf
+File9=dseg7seggchanmini-regular.ttf
+File10=dseg7seggchan-regular.ttf
+File11=HoneyLogo1.jpg
+File12=Main_Layout.bal
 NumberOfLibraries=5
 Library1=core
 Library2=usbserial
@@ -24,7 +29,7 @@ Library5=stringutils
 	#VersionCode: 1
 	#VersionName: 
 	'SupportedOrientations possible values: unspecified, landscape or portrait.
-	#SupportedOrientations: unspecified
+	#SupportedOrientations: landscape
 	#CanInstallToExternalStorage: False
 #End Region
 
@@ -64,15 +69,6 @@ Sub Activity_Create(FirstTime As Boolean)
 '    lbl.Typeface = DSEG7Clasic_Bold
 '  End If
 'Next
-
-
-
-
-
-
-
-
-	
 	
 	'Do not forget to load the layout file created with the visual designer. For example:
 	Activity.LoadLayout("Main_Layout")
@@ -132,6 +128,9 @@ Sub Astreams_NewData (Buffer() As Byte)
 	Dim bandera As Boolean
 	''Se convierte la informacion recibida a UTF8
 	command =conv.StringFromBytes(Buffer, "UTF8")
-	Msgbox(command,"LOL")
-
+	If command.Contains("ID0") Then 
+		Msgbox(command.IndexOf("ID0"),"999")
+		Timer_1.Text = command
+		
+	End If
 End Sub
