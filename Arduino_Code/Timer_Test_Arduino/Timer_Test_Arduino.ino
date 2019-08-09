@@ -3,11 +3,13 @@ Timer t;
 int global_count, i;
 
 //Grupo de pines para timers
-int Trigger_Test_Pin_1 = 2;
-int Trigger_Test_Pin_2 = 3;
+
+
 int Group1_PinTimerDev[11] = {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32};
-int Group2_PinTimerDev[11] = {33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43};
+int Trigger_Test_Pin_1 = 33;
+int Group2_PinTimerDev[11] = {34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44};
 String ID_Char[22] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v"};
+int Trigger_Test_Pin_2 = 45;
 String Msg_To_Android = "";
 //Se crea la clase timer_divice, aqui se va a hacer la suma de los tiempos en los que seactivan los timers
 class Timer_device
@@ -33,10 +35,9 @@ class Timer_device
     //   Serial.println(currentTime);
       // Serial.println(NextTimeToCheck);
         Pin_Timer_Status = digitalRead(Pin_Timer);
-        if (Pin_Timer_Status == LOW)
+        if (Pin_Timer_Status == HIGH)
         {
           count++;
-          
          // Serial.println("  ID" + ID_Char[ID_timer]  +":"+ String(count));
      
           is_finished = false;
@@ -67,17 +68,17 @@ void setup() {
   }
   pinMode(Trigger_Test_Pin_1,INPUT);
   pinMode(Trigger_Test_Pin_2,INPUT);
-  t.every(200, SendCount);
+  t.every(100, SendCount);
   
 }
 
 
 
 void loop() {
-  if(digitalRead(Trigger_Test_Pin_1) == true){
+  if(digitalRead(Trigger_Test_Pin_1) == false){
     for(i = 0; i <= 10; i++){
       if (TDevices1[i].is_finished == false){
-        TDevices1[i].Read_n_sum_count(Group1_PinTimerDev[i], 1000, i); 
+        TDevices1[i].Read_n_sum_count(Group1_PinTimerDev[i], 100, i); 
       }
     }
   }
@@ -87,10 +88,10 @@ void loop() {
        TDevices1[i].is_finished = false;
     }
   }
-  if(digitalRead(Trigger_Test_Pin_2) == true){
+  if(digitalRead(Trigger_Test_Pin_2) == false){
     for(i = 0; i <= 10; i++){
       if (TDevices2[i].is_finished == false){
-        TDevices2[i].Read_n_sum_count(Group2_PinTimerDev[i], 1000, (i + 11)); 
+        TDevices2[i].Read_n_sum_count(Group2_PinTimerDev[i], 100, (i + 11)); 
       }
     }
   }
@@ -116,4 +117,5 @@ void SendCount()
   //Msg_To_Android = "ASD";
   Serial.println(String(Msg_To_Android));
   Msg_To_Android = "";
+  Serial.flush();
 }

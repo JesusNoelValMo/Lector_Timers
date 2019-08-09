@@ -128,9 +128,21 @@ Sub Astreams_NewData (Buffer() As Byte)
 	Dim bandera As Boolean
 	''Se convierte la informacion recibida a UTF8
 	command =conv.StringFromBytes(Buffer, "UTF8")
-	If command.Contains("ID0") Then 
-		Msgbox(command.IndexOf("ID0"),"999")
-		Timer_1.Text = command
+	If command.Contains("a") Then 
+		'Msgbox(command.IndexOf("a"),"999")
+		Try 
+			Timer_1.Text = command.SubString2(1, command.IndexOf("b"))
+			
+		Catch
+			'Msgbox(LastException,"err")
+			Log(LastException)
+		End Try
+		
 		
 	End If
+'	If command.Contains("b") Then 
+'		'Msgbox(command.IndexOf("a"),"999")
+'		Timer_2.Text = command.SubString2(command.IndexOf("b"), command.IndexOf("b") + 2)
+'		
+'	End If
 End Sub
