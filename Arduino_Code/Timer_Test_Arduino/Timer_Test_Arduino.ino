@@ -7,7 +7,7 @@ int Trigger_Test_Pin_1 = 2;
 int Trigger_Test_Pin_2 = 3;
 int Group1_PinTimerDev[11] = {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32};
 int Group2_PinTimerDev[11] = {33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43};
-
+String ID_Char[22] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v"};
 //Se crea la clase timer_divice, aqui se va a hacer la suma de los tiempos en los que seactivan los timers
 class Timer_device
 {
@@ -29,20 +29,21 @@ class Timer_device
       if (currentTime >= NextTimeToCheck)
       {
         NextTimeToCheck = TimeToCheck + currentTime;
-       // Serial.println(currentTime);
-       // Serial.println(NextTimeToCheck);
+       Serial.println(currentTime);
+       Serial.println(NextTimeToCheck);
         Pin_Timer_Status = digitalRead(Pin_Timer);
         if (Pin_Timer_Status == LOW)
         {
           count++;
-          Serial.print("ID" + String(ID_timer)  + String(count));
+          
+          Serial.println("  ID" + ID_Char[ID_timer]  +":"+ String(count));
      
           is_finished = false;
         }
         else 
         {
           is_finished = true;
-          Serial.print("LISTO");
+          Serial.println("LISTO");
         }
       }
     }
@@ -89,7 +90,7 @@ void loop() {
   if(digitalRead(Trigger_Test_Pin_2) == true){
     for(i = 0; i <= 10; i++){
       if (TDevices2[i].is_finished == false){
-        TDevices2[i].Read_n_sum_count(Group2_PinTimerDev[i], 1000, i); 
+        TDevices2[i].Read_n_sum_count(Group2_PinTimerDev[i], 1000, (i + 11)); 
       }
     }
   }
@@ -100,6 +101,6 @@ void loop() {
        
     }
   }
-  t.update();
+ // t.update();
   //Serial.print("ASD");
 }
