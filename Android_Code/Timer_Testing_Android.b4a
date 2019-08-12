@@ -51,11 +51,73 @@ Sub Process_Globals
 End Sub
 
 Sub Globals
+	'Dim information(2) As String 
 	'These global variables will be redeclared each time the activity is created.
 	'These variables can only be accessed from this module.
-	Dim Timer_1, Timer_2, Timer_3, Timer_4, Timer_5, Timer_6, Timer_7, Timer_8, Timer_9, Timer_10, Timer_11, Timer_12, Timer_13, Timer_14 As Label
-	Dim Timer_15, Timer_16, Timer_17, Timer_18, Timer_19, Timer_20, Timer_21, Timer_22 As Label
+	Private Timer_1, Timer_2, Timer_3, Timer_4, Timer_5, Timer_6, Timer_7, Timer_8, Timer_9, Timer_10, Timer_11, Timer_12, Timer_13, Timer_14 As Label
+	Private Timer_15, Timer_16, Timer_17, Timer_18, Timer_19, Timer_20, Timer_21, Timer_22 As Label
+	Private Timers(22) As Label 
+	
+	
+	
+	Timers(0) = Timer_1
+	Timers(1) = Timer_2
+	Timers(2) = Timer_3
+	Timers(3) = Timer_4
+	Timers(4) = Timer_5
+	Timers(5) = Timer_6
+	Timers(6) = Timer_7
+	Timers(7) = Timer_8
+	Timers(8) = Timer_9
+	Timers(9) = Timer_10
+	Timers(10) = Timer_11
+	
+	
+	Timers(11) = Timer_12
+	Timers(12) = Timer_13
+	Timers(13) = Timer_14
+	Timers(14) = Timer_15
+	Timers(15) = Timer_16
+	Timers(16) = Timer_17
+	Timers(17) = Timer_18
+	Timers(18) = Timer_19
+	Timers(19) = Timer_20
+	Timers(20) = Timer_21
+	Timers(21) = Timer_22
+	
+	Dim ID_arr(22) As String
+	ID_arr(0) = "a"
+	ID_arr(1) = "b"
+	ID_arr(2) = "c"
+	ID_arr(3) = "d"
+	ID_arr(4) = "e"
+	ID_arr(5) = "f"
+	ID_arr(6) = "g"
+	ID_arr(7) = "h"
+	ID_arr(8) = "i"
+	ID_arr(9) = "j"
+	ID_arr(10) = "k"
+	ID_arr(11) = "l"
+	
+	
+	ID_arr(12) = "m"
+	ID_arr(13) = "n"
+	ID_arr(14) = "o"
+	ID_arr(15) = "p"
+	ID_arr(16) = "q"
+	ID_arr(17) = "r"
+	ID_arr(18) = "s"
+	ID_arr(19) = "t"
+	ID_arr(20) = "u"
+	ID_arr(21) = "v"
+
+	Dim Contador_Is_Finished(22) As Int
+	
+
+	
+	
 	Dim EditText1 As EditText
+
 	
 
 End Sub
@@ -69,23 +131,26 @@ Sub Activity_Create(FirstTime As Boolean)
 '    lbl.Typeface = DSEG7Clasic_Bold
 '  End If
 'Next
-	
+
 	'Do not forget to load the layout file created with the visual designer. For example:
 	Activity.LoadLayout("Main_Layout")
-	If (usb.HasPermission(1)) Then	' Ver_2.4
+	Timers = Array As Label(Timer_1, Timer_2, Timer_3, Timer_4, Timer_5, Timer_6, Timer_7, Timer_8, Timer_9, Timer_10, Timer_11, Timer_12, Timer_13, Timer_14, Timer_15, Timer_16, Timer_17, Timer_18, Timer_19, Timer_20, Timer_21, Timer_22)
+	Contador_Is_Finished = Array As Int (0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+	'Timers(0).Initialize("Timers")
+	
+	'information(0) = usb.DeviceInfo(1)
+	'information(1) = usb.DeviceInfo(2)
+
+	If (usb.HasPermission(1)) Then	' Ver_2.
+		
+		
 		'Msgbox(usb1.DeviceInfo(1), "Device Information 1")	' Ver_2.4
 		Dim dev As Int
 		'dev = usb.Open(115200, 1)		' Ver_2.4
-		
 		dev = usb.Open(115200, 1)		' Ver_2.4
 		''Msgbox(usb.UsbPresent(1),"AS")	'
 	
-		
-		If dev <> usb.USB_NONE Then
-			'Log("Connected successfully! 1")
-			'btnOpen.Enabled = False
-			'btnClose.Enabled = True
-			'btnSend.Enabled = True			
+		If dev <> usb.USB_NONE Then	
 			 astreams.Initialize(usb.GetInputStream,usb.GetOutputStream,"Astreams")
 		Else
 			Log("Error opening USB port 1")
@@ -126,20 +191,80 @@ Sub Astreams_NewData (Buffer() As Byte)
 	Dim command As String
 	Dim Pos_Box As Int
 	Dim bandera As Boolean
+	Dim l As Label 
+	Dim i,j As Int
 	''Se convierte la informacion recibida a UTF8
 	command =conv.StringFromBytes(Buffer, "UTF8")
-	If command.Contains("a") Then 
-		'Msgbox(command.IndexOf("a"),"999")
-		Try 
-			Timer_1.Text = command.SubString2(1, command.IndexOf("b"))
-			
-		Catch
-			'Msgbox(LastException,"err")
-			Log(LastException)
-		End Try
-		
-		
-	End If
+	For i = 0 To 21 
+		'Contiene algun ID valido?
+		If command.Contains(ID_arr(i)) = True Then 
+			'El ID concuerda con el tag?
+			If Timers(i).tag = ID_arr(i) Then 
+				'Si el ID concuerda con el Tag, es el mismo contenido que tenia antes?
+				'Msgbox(command.IndexOf(ID_arr(i)),"999")
+				'Msgbox(command.IndexOf(ID_arr(i+1)),"999")
+				If command.IndexOf(ID_arr(i)) > 0 Or command.IndexOf(ID_arr(i)) = 0 Then 
+				Try
+					
+				
+				If Timers(i).Text <> command.SubString2(command.IndexOf(ID_arr(i))+1,command.IndexOf(ID_arr(i+1))) Then 
+					'Si no se repite el contenido, el texto del label sera el valor que se recibió
+					' Se toma el valor del index donde aparece el ID hasta donde aparece el siguiente ID
+					'Ej: a129b199, se tomaria el 129 unicamente. 
+					'Contador_Is_Finished(i) = 0
+						Try
+							''BUG CON EL ULTIMO VALOR NO SE MOSTRARIA NADA PORQUE SE INTENTA PASAR A LA SIGUIENTE POSICION DEL ARRAY ID_ARR
+							'NO HAY NADA DESPUES DE V
+							Timers(i).Text = command.SubString2(command.IndexOf(ID_arr(i))+1,command.IndexOf(ID_arr(i+1)))
+						Catch
+							Log(LastException)
+						End Try
+						
+				
+				Else 
+					'Si se repite el contenido con lo que se recibió, se aumente un 1 al contador
+					'para asegurarse de que no fue un error en el buffer
+					Contador_Is_Finished(i) = Contador_Is_Finished(i) + 1
+					'si se repite varias veces el mismo mensaje, se toma como proceso terminado
+				 	If Contador_Is_Finished(i) = 30 Then 
+						'Se evalua si el valor del timer es el requerido
+						If Timers(i).Text < 30 Then 
+							Try
+								Timers(i).Color = Colors.Red
+							Catch
+								Log(LastException)
+							End Try
+							
+						Else 	
+							Try
+								Timers(i).Color = Colors.Green
+							Catch
+								Log(LastException)
+							End Try
+							
+						End If	
+					End If 
+				End If 
+				Catch
+					 Log(LastException)
+				End Try
+				End If
+				
+			End If
+		End If	
+	Next
+'	If command.Contains("a") Then 
+'		'Msgbox(command.IndexOf("a"),"999")
+'		Try 
+'			Timer_1.Text = command.SubString2(1, command.IndexOf("b"))
+'			
+'		Catch
+'			'Msgbox(LastException,"err")
+'			Log(LastException)
+'		End Try
+'		
+'		
+'	End If
 '	If command.Contains("b") Then 
 '		'Msgbox(command.IndexOf("a"),"999")
 '		Timer_2.Text = command.SubString2(command.IndexOf("b"), command.IndexOf("b") + 2)
