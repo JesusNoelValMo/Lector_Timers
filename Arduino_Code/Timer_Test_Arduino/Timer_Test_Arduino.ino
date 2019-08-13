@@ -11,6 +11,7 @@ int Group2_PinTimerDev[11] = {34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44};
 String ID_Char[22] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v"};
 int Trigger_Test_Pin_2 = 45;
 String Msg_To_Android = "";
+boolean Send_Flag = false;
 //Se crea la clase timer_divice, aqui se va a hacer la suma de los tiempos en los que seactivan los timers
 class Timer_device
 {
@@ -78,6 +79,7 @@ void loop() {
   if(digitalRead(Trigger_Test_Pin_1) == false){
     for(i = 0; i <= 10; i++){
       if (TDevices1[i].is_finished == false){
+        Send_Flag = true;
         TDevices1[i].Read_n_sum_count(Group1_PinTimerDev[i], 100, i); 
       }
     }
@@ -91,6 +93,7 @@ void loop() {
   if(digitalRead(Trigger_Test_Pin_2) == false){
     for(i = 0; i <= 10; i++){
       if (TDevices2[i].is_finished == false){
+        Send_Flag = true;
         TDevices2[i].Read_n_sum_count(Group2_PinTimerDev[i], 100, (i + 11)); 
       }
     }
@@ -102,20 +105,27 @@ void loop() {
        
     }
   }
+  if((digitalRead(Trigger_Test_Pin_2) == true) && (digitalRead(Trigger_Test_Pin_1) == true)){
+    Send_Flag = false;
+  }
  t.update();
   //Serial.print("ASD");
 }
 
 void SendCount()
 {
-  for (i = 0; i <= 10; i++){
-     Msg_To_Android =  Msg_To_Android + ID_Char[i] +  String(TDevices1[i].count);
+  if (Send_Flag == true){
+    for (i = 0; i <= 10; i++){
+    Msg_To_Android =  Msg_To_Android + ID_Char[i] +  String(TDevices1[i].count);
+    }
+    for (i = 0; i <= 10; i++){
+      Msg_To_Android =  Msg_To_Android + ID_Char[i + 11] +  String(TDevices2[i].count);
+    }
+    //Msg_To_Android = "ASD";
+    Msg_To_Android = Msg_To_Android + "z" ;
+    Serial.println(String(Msg_To_Android));
+    Msg_To_Android = "";
+    Serial.flush();
   }
-  for (i = 0; i <= 10; i++){
-     Msg_To_Android =  Msg_To_Android + ID_Char[i + 11] +  String(TDevices2[i].count);
-  }
-  //Msg_To_Android = "ASD";
-  Serial.println(String(Msg_To_Android));
-  Msg_To_Android = "";
-  Serial.flush();
+
 }

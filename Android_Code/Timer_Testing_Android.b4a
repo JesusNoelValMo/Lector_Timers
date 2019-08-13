@@ -45,6 +45,7 @@ Sub Process_Globals
 	Dim usb As UsbSerial
 	Dim astreams As AsyncStreams
 		Dim mensaje_Out As String
+	
 	'Declare font variables
 'Dim DSEG7Clasic_Bold As Typeface
 'DSEG7Clasic_Bold = Typeface.LoadFromAssets("arial.ttf")
@@ -56,7 +57,11 @@ Sub Globals
 	'These variables can only be accessed from this module.
 	Private Timer_1, Timer_2, Timer_3, Timer_4, Timer_5, Timer_6, Timer_7, Timer_8, Timer_9, Timer_10, Timer_11, Timer_12, Timer_13, Timer_14 As Label
 	Private Timer_15, Timer_16, Timer_17, Timer_18, Timer_19, Timer_20, Timer_21, Timer_22 As Label
+	Private RadioButton3_6S, RadioButton36S As RadioButton
+	Dim Time_To_Check_Radio_Button, Time_To_Check_Radio_Button2 As Double
 	Private Timers(22) As Label 
+	Dim Last_Msg As String
+	
 	
 	
 	
@@ -85,7 +90,7 @@ Sub Globals
 	Timers(20) = Timer_21
 	Timers(21) = Timer_22
 	
-	Dim ID_arr(22) As String
+	Dim ID_arr(23) As String
 	ID_arr(0) = "a"
 	ID_arr(1) = "b"
 	ID_arr(2) = "c"
@@ -110,7 +115,7 @@ Sub Globals
 	ID_arr(19) = "t"
 	ID_arr(20) = "u"
 	ID_arr(21) = "v"
-
+	ID_arr(22) = "z"
 	Dim Contador_Is_Finished(22) As Int
 	
 
@@ -140,7 +145,8 @@ Sub Activity_Create(FirstTime As Boolean)
 	
 	'information(0) = usb.DeviceInfo(1)
 	'information(1) = usb.DeviceInfo(2)
-
+	Time_To_Check_Radio_Button = 3.6
+	Time_To_Check_Radio_Button2 = 3.6
 	If (usb.HasPermission(1)) Then	' Ver_2.
 		
 		
@@ -193,6 +199,7 @@ Sub Astreams_NewData (Buffer() As Byte)
 	Dim bandera As Boolean
 	Dim l As Label 
 	Dim i,j As Int
+	
 	''Se convierte la informacion recibida a UTF8
 	command =conv.StringFromBytes(Buffer, "UTF8")
 	For i = 0 To 21 
@@ -205,44 +212,82 @@ Sub Astreams_NewData (Buffer() As Byte)
 				'Msgbox(command.IndexOf(ID_arr(i+1)),"999")
 				If command.IndexOf(ID_arr(i)) > 0 Or command.IndexOf(ID_arr(i)) = 0 Then 
 				Try
+					Dim val As Double 
+					Dim string_Div As String 
+					'If (ID_arr(i) <> "v") Then 
+						val = command.SubString2(command.IndexOf(ID_arr(i))+1,command.IndexOf(ID_arr(i+1)))
+					'Else 
+						'val = command.SubString(command.IndexOf(ID_arr(i))+1)	
+					'End If
 					
-				
-				If Timers(i).Text <> command.SubString2(command.IndexOf(ID_arr(i))+1,command.IndexOf(ID_arr(i+1))) Then 
+					string_Div =  (val / 10)
+					Last_Msg = NumberFormat2(string_Div,3,1,1,False) & " 5EG"
+					
+				If Timers(i).Text <> Last_Msg Then 
+					If ((string_Div > 0.0) And (string_Div < 0.5)) Then 
+						
+						Timers(i).Color = 0xFF474147
+					End If
+				'If Timers(i).Text <> Last_Msg Then 
 					'Si no se repite el contenido, el texto del label sera el valor que se recibió
 					' Se toma el valor del index donde aparece el ID hasta donde aparece el siguiente ID
 					'Ej: a129b199, se tomaria el 129 unicamente. 
-					'Contador_Is_Finished(i) = 0
+					Contador_Is_Finished(i) = 0
 						Try
 							''BUG CON EL ULTIMO VALOR NO SE MOSTRARIA NADA PORQUE SE INTENTA PASAR A LA SIGUIENTE POSICION DEL ARRAY ID_ARR
 							'NO HAY NADA DESPUES DE V
-							Timers(i).Text = command.SubString2(command.IndexOf(ID_arr(i))+1,command.IndexOf(ID_arr(i+1)))
+						Timers(i).Text = NumberFormat2(string_Div,3,1,1,False) & " 5EG"
+							
 						Catch
 							Log(LastException)
 						End Try
-						
-				
 				Else 
 					'Si se repite el contenido con lo que se recibió, se aumente un 1 al contador
 					'para asegurarse de que no fue un error en el buffer
 					Contador_Is_Finished(i) = Contador_Is_Finished(i) + 1
 					'si se repite varias veces el mismo mensaje, se toma como proceso terminado
-				 	If Contador_Is_Finished(i) = 30 Then 
+				 	If Contador_Is_Finished(i) > 2 Then 
 						'Se evalua si el valor del timer es el requerido
-						If Timers(i).Text < 30 Then 
-							Try
-								Timers(i).Color = Colors.Red
-							Catch
-								Log(LastException)
-							End Try
+						Contador_Is_Finished(i) = 0
+						'Grupo 1
+						Dim Time_To_Check As Double = Timers(i).Text.SubString2(0, Timers(i).Text.IndexOf(" "))
+						If i > 10 Then 
+							If  (((Time_To_Check = Time_To_Check_Radio_Button2) Or (Time_To_Check > Time_To_Check_Radio_Button2)) And (Time_To_Check < (Time_To_Check_Radio_Button2 + (Time_To_Check_Radio_Button2 * 0.1 )) Or Time_To_Check = (Time_To_Check_Radio_Button2 + (Time_To_Check_Radio_Button2 * 0.1 )))       )Then 
+								Try
+									Timers(i).Color = Colors.Green
+								Catch
+									Log(LastException)
+								End Try
 							
-						Else 	
-							Try
-								Timers(i).Color = Colors.Green
-							Catch
-								Log(LastException)
-							End Try
+							Else 	
+								Try
+									Timers(i).Color = Colors.Red
+								Catch
+									Log(LastException)
+								End Try
 							
 						End If	
+						
+						Else 
+							'Dim Time_To_Check As Double = Timers(i).Text.SubString2(0, Timers(i).Text.IndexOf(" "))
+							If  (((Time_To_Check = Time_To_Check_Radio_Button) Or (Time_To_Check > Time_To_Check_Radio_Button)) And (Time_To_Check < (Time_To_Check_Radio_Button + (Time_To_Check_Radio_Button * 0.1 )) Or Time_To_Check = (Time_To_Check_Radio_Button + (Time_To_Check_Radio_Button * 0.1 )))       )Then 
+								Try
+									Timers(i).Color = Colors.Green
+								Catch
+									Log(LastException)
+								End Try
+							
+							Else 	
+								Try
+									Timers(i).Color = Colors.Red
+								Catch
+									Log(LastException)
+								End Try
+							
+						End If	
+						End If 
+							
+							
 					End If 
 				End If 
 				Catch
@@ -253,21 +298,30 @@ Sub Astreams_NewData (Buffer() As Byte)
 			End If
 		End If	
 	Next
-'	If command.Contains("a") Then 
-'		'Msgbox(command.IndexOf("a"),"999")
-'		Try 
-'			Timer_1.Text = command.SubString2(1, command.IndexOf("b"))
-'			
-'		Catch
-'			'Msgbox(LastException,"err")
-'			Log(LastException)
-'		End Try
-'		
-'		
-'	End If
-'	If command.Contains("b") Then 
-'		'Msgbox(command.IndexOf("a"),"999")
-'		Timer_2.Text = command.SubString2(command.IndexOf("b"), command.IndexOf("b") + 2)
-'		
-'	End If
+
+End Sub
+
+Sub RadioButton3_6S_CheckedChange(Checked As Boolean)
+	If Checked = True Then 
+		Time_To_Check_Radio_Button = 3.6
+	End If
+End Sub
+Sub RadioButton36S_CheckedChange(Checked As Boolean)
+	If Checked = True Then 
+		Time_To_Check_Radio_Button = 36
+	End If
+End Sub
+
+
+
+Sub RadioButton36S2_CheckedChange(Checked As Boolean)
+	If Checked = True Then 
+		Time_To_Check_Radio_Button2 = 36
+	End If
+End Sub
+
+Sub RadioButton3_6S2_CheckedChange(Checked As Boolean)
+	If Checked = True Then 
+		Time_To_Check_Radio_Button2 = 3.6
+	End If	
 End Sub
