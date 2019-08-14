@@ -224,9 +224,9 @@ Sub Astreams_NewData (Buffer() As Byte)
 					Last_Msg = NumberFormat2(string_Div,3,1,1,False) & " 5EG"
 					
 				If Timers(i).Text <> Last_Msg Then 
-					If ((string_Div > 0.0) And (string_Div < 0.5)) Then 
-						
+					If ((string_Div > 0.0)   And (string_Div < 0.5)) Then 
 						Timers(i).Color = 0xFF474147
+						
 					End If
 				'If Timers(i).Text <> Last_Msg Then 
 					'Si no se repite el contenido, el texto del label sera el valor que se recibió
@@ -236,7 +236,10 @@ Sub Astreams_NewData (Buffer() As Byte)
 						Try
 							''BUG CON EL ULTIMO VALOR NO SE MOSTRARIA NADA PORQUE SE INTENTA PASAR A LA SIGUIENTE POSICION DEL ARRAY ID_ARR
 							'NO HAY NADA DESPUES DE V
-						Timers(i).Text = NumberFormat2(string_Div,3,1,1,False) & " 5EG"
+						If string_Div <> 0.0 Then 
+							Timers(i).Text = NumberFormat2(string_Div,3,1,1,False) & " 5EG"
+						End If
+						
 							
 						Catch
 							Log(LastException)
@@ -251,8 +254,11 @@ Sub Astreams_NewData (Buffer() As Byte)
 						Contador_Is_Finished(i) = 0
 						'Grupo 1
 						Dim Time_To_Check As Double = Timers(i).Text.SubString2(0, Timers(i).Text.IndexOf(" "))
+						If Time_To_Check <> 0.0 Then 
 						If i > 10 Then 
-							If  (((Time_To_Check = Time_To_Check_Radio_Button2) Or (Time_To_Check > Time_To_Check_Radio_Button2)) And (Time_To_Check < (Time_To_Check_Radio_Button2 + (Time_To_Check_Radio_Button2 * 0.1 )) Or Time_To_Check = (Time_To_Check_Radio_Button2 + (Time_To_Check_Radio_Button2 * 0.1 )))       )Then 
+							
+								
+							If  (((Time_To_Check = Time_To_Check_Radio_Button2) Or (Time_To_Check > Time_To_Check_Radio_Button2)) And (Time_To_Check < (Time_To_Check_Radio_Button2 + (Time_To_Check_Radio_Button2 * 0.1 )) Or Time_To_Check = (Time_To_Check_Radio_Button2 + (Time_To_Check_Radio_Button2 * 0.1 )))     )Then 
 								Try
 									Timers(i).Color = Colors.Green
 								Catch
@@ -286,7 +292,7 @@ Sub Astreams_NewData (Buffer() As Byte)
 							
 						End If	
 						End If 
-							
+					End If		
 							
 					End If 
 				End If 
