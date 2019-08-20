@@ -79,7 +79,7 @@ void setup() {
 
 
 void loop() {
-  if(digitalRead(Trigger_Test_Pin_1) == true){
+  if(digitalRead(Trigger_Test_Pin_1) == false){
     if (ResetCountT1 == true){
       for(i = 0; i <= 10; i++){
         
@@ -106,7 +106,7 @@ void loop() {
 
 
   
-  if(digitalRead(Trigger_Test_Pin_2) == true){
+  if(digitalRead(Trigger_Test_Pin_2) == false){
     if (ResetCountT2 == true){
       for(i = 0; i <= 10; i++){
         
