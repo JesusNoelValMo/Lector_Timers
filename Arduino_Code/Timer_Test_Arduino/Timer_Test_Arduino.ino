@@ -98,7 +98,7 @@ void loop() {
   }
   else{
     ResetCountT1 = true;
-    delay(10);
+    //delay(10);
   }
 
 
@@ -125,7 +125,7 @@ void loop() {
   }
   else{
     ResetCountT2 = true;
-   // delay(100);
+    //delay(10);
   }
   if((digitalRead(Trigger_Test_Pin_2) == false) && (digitalRead(Trigger_Test_Pin_1) == false)){
     Send_Flag = false;
