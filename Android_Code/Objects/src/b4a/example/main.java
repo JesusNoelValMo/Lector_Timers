@@ -341,6 +341,7 @@ public static double _time_to_check_radio_button = 0;
 public static double _time_to_check_radio_button2 = 0;
 public anywheresoftware.b4a.objects.LabelWrapper[] _timers = null;
 public static String _last_msg = "";
+public static int _dev = 0;
 public static String[] _id_arr = null;
 public static int[] _contador_is_finished = null;
 public anywheresoftware.b4a.objects.EditTextWrapper _edittext1 = null;
@@ -351,7 +352,6 @@ public static boolean isAnyActivityVisible() {
 vis = vis | (main.mostCurrent != null);
 return vis;}
 public static String  _activity_create(boolean _firsttime) throws Exception{
-int _dev = 0;
  //BA.debugLineNum = 104;BA.debugLine="Sub Activity_Create(FirstTime As Boolean)";
  //BA.debugLineNum = 115;BA.debugLine="Activity.LoadLayout(\"Main_Layout\")";
 mostCurrent._activity.LoadLayout("Main_Layout",mostCurrent.activityBA);
@@ -365,8 +365,6 @@ _time_to_check_radio_button = 3.6;
 _time_to_check_radio_button2 = 3.6;
  //BA.debugLineNum = 124;BA.debugLine="If (usb.HasPermission(1)) Then	' Ver_2.";
 if ((_usb.HasPermission((int) (1)))) { 
- //BA.debugLineNum = 128;BA.debugLine="Dim dev As Int";
-_dev = 0;
  //BA.debugLineNum = 130;BA.debugLine="dev = usb.Open(115200, 1)		' Ver_2.4";
 _dev = _usb.Open(processBA,(int) (115200),(int) (1));
  //BA.debugLineNum = 133;BA.debugLine="If dev <> usb.USB_NONE Then";
@@ -380,18 +378,30 @@ anywheresoftware.b4a.keywords.Common.Log("Error opening USB port 1");
  }else {
  //BA.debugLineNum = 139;BA.debugLine="usb.RequestPermission(1)  ' Ver_2.4";
 _usb.RequestPermission((int) (1));
+ //BA.debugLineNum = 140;BA.debugLine="Dim dev As Int";
+_dev = 0;
+ //BA.debugLineNum = 142;BA.debugLine="dev = usb.Open(115200, 1)		' Ver_2.4";
+_dev = _usb.Open(processBA,(int) (115200),(int) (1));
+ //BA.debugLineNum = 145;BA.debugLine="If dev <> usb.USB_NONE Then";
+if (_dev!=_usb.USB_NONE) { 
+ //BA.debugLineNum = 146;BA.debugLine="astreams.Initialize(usb.GetInputStream,usb.Get";
+_astreams.Initialize(processBA,_usb.GetInputStream(),_usb.GetOutputStream(),"Astreams");
+ }else {
+ //BA.debugLineNum = 148;BA.debugLine="Log(\"Error opening USB port 1\")";
+anywheresoftware.b4a.keywords.Common.Log("Error opening USB port 1");
  };
- //BA.debugLineNum = 142;BA.debugLine="End Sub";
+ };
+ //BA.debugLineNum = 152;BA.debugLine="End Sub";
 return "";
 }
 public static String  _activity_pause(boolean _userclosed) throws Exception{
- //BA.debugLineNum = 153;BA.debugLine="Sub Activity_Pause (UserClosed As Boolean)";
- //BA.debugLineNum = 155;BA.debugLine="End Sub";
+ //BA.debugLineNum = 163;BA.debugLine="Sub Activity_Pause (UserClosed As Boolean)";
+ //BA.debugLineNum = 165;BA.debugLine="End Sub";
 return "";
 }
 public static String  _activity_resume() throws Exception{
- //BA.debugLineNum = 149;BA.debugLine="Sub Activity_Resume";
- //BA.debugLineNum = 151;BA.debugLine="End Sub";
+ //BA.debugLineNum = 159;BA.debugLine="Sub Activity_Resume";
+ //BA.debugLineNum = 161;BA.debugLine="End Sub";
 return "";
 }
 public static String  _astreams_newdata(byte[] _buffer) throws Exception{
@@ -404,113 +414,113 @@ int _j = 0;
 double _val = 0;
 String _string_div = "";
 double _time_to_check = 0;
- //BA.debugLineNum = 170;BA.debugLine="Sub Astreams_NewData (Buffer() As Byte)";
- //BA.debugLineNum = 171;BA.debugLine="Dim command As String";
+ //BA.debugLineNum = 180;BA.debugLine="Sub Astreams_NewData (Buffer() As Byte)";
+ //BA.debugLineNum = 181;BA.debugLine="Dim command As String";
 _command = "";
- //BA.debugLineNum = 172;BA.debugLine="Dim Pos_Box As Int";
+ //BA.debugLineNum = 182;BA.debugLine="Dim Pos_Box As Int";
 _pos_box = 0;
- //BA.debugLineNum = 173;BA.debugLine="Dim bandera As Boolean";
+ //BA.debugLineNum = 183;BA.debugLine="Dim bandera As Boolean";
 _bandera = false;
- //BA.debugLineNum = 174;BA.debugLine="Dim l As Label";
+ //BA.debugLineNum = 184;BA.debugLine="Dim l As Label";
 _l = new anywheresoftware.b4a.objects.LabelWrapper();
- //BA.debugLineNum = 175;BA.debugLine="Dim i,j As Int";
+ //BA.debugLineNum = 185;BA.debugLine="Dim i,j As Int";
 _i = 0;
 _j = 0;
- //BA.debugLineNum = 178;BA.debugLine="command =conv.StringFromBytes(Buffer, \"UTF8\")";
+ //BA.debugLineNum = 188;BA.debugLine="command =conv.StringFromBytes(Buffer, \"UTF8\")";
 _command = _conv.StringFromBytes(_buffer,"UTF8");
- //BA.debugLineNum = 179;BA.debugLine="For i = 0 To 21";
+ //BA.debugLineNum = 189;BA.debugLine="For i = 0 To 21";
 {
 final int step7 = 1;
 final int limit7 = (int) (21);
 for (_i = (int) (0) ; (step7 > 0 && _i <= limit7) || (step7 < 0 && _i >= limit7); _i = ((int)(0 + _i + step7)) ) {
- //BA.debugLineNum = 181;BA.debugLine="If command.Contains(ID_arr(i)) = True Then";
+ //BA.debugLineNum = 191;BA.debugLine="If command.Contains(ID_arr(i)) = True Then";
 if (_command.contains(mostCurrent._id_arr[_i])==anywheresoftware.b4a.keywords.Common.True) { 
- //BA.debugLineNum = 183;BA.debugLine="If Timers(i).tag = ID_arr(i) Then";
+ //BA.debugLineNum = 193;BA.debugLine="If Timers(i).tag = ID_arr(i) Then";
 if ((mostCurrent._timers[_i].getTag()).equals((Object)(mostCurrent._id_arr[_i]))) { 
- //BA.debugLineNum = 187;BA.debugLine="If command.IndexOf(ID_arr(i)) > 0 Or command.I";
+ //BA.debugLineNum = 197;BA.debugLine="If command.IndexOf(ID_arr(i)) > 0 Or command.I";
 if (_command.indexOf(mostCurrent._id_arr[_i])>0 || _command.indexOf(mostCurrent._id_arr[_i])==0) { 
- //BA.debugLineNum = 188;BA.debugLine="Try";
-try { //BA.debugLineNum = 189;BA.debugLine="Dim val As Double";
+ //BA.debugLineNum = 198;BA.debugLine="Try";
+try { //BA.debugLineNum = 199;BA.debugLine="Dim val As Double";
 _val = 0;
- //BA.debugLineNum = 190;BA.debugLine="Dim string_Div As String";
+ //BA.debugLineNum = 200;BA.debugLine="Dim string_Div As String";
 _string_div = "";
- //BA.debugLineNum = 192;BA.debugLine="val = command.SubString2(command.IndexOf(ID_";
+ //BA.debugLineNum = 202;BA.debugLine="val = command.SubString2(command.IndexOf(ID_";
 _val = (double)(Double.parseDouble(_command.substring((int) (_command.indexOf(mostCurrent._id_arr[_i])+1),_command.indexOf(mostCurrent._id_arr[(int) (_i+1)]))));
- //BA.debugLineNum = 197;BA.debugLine="string_Div =  (val / 10)";
-_string_div = BA.NumberToString((_val/(double)10));
- //BA.debugLineNum = 198;BA.debugLine="Last_Msg = NumberFormat2(string_Div,3,1,1,Fal";
+ //BA.debugLineNum = 207;BA.debugLine="string_Div =  (val / 10) + .2";
+_string_div = BA.NumberToString((_val/(double)10)+.2);
+ //BA.debugLineNum = 208;BA.debugLine="Last_Msg = NumberFormat2(string_Div,3,1,1,Fal";
 mostCurrent._last_msg = anywheresoftware.b4a.keywords.Common.NumberFormat2((double)(Double.parseDouble(_string_div)),(int) (3),(int) (1),(int) (1),anywheresoftware.b4a.keywords.Common.False)+" 5EG";
- //BA.debugLineNum = 200;BA.debugLine="If Timers(i).Text <> Last_Msg Then";
+ //BA.debugLineNum = 210;BA.debugLine="If Timers(i).Text <> Last_Msg Then";
 if ((mostCurrent._timers[_i].getText()).equals(mostCurrent._last_msg) == false) { 
- //BA.debugLineNum = 201;BA.debugLine="If ((string_Div > 0.0)   And (string_Div < 0.";
+ //BA.debugLineNum = 211;BA.debugLine="If ((string_Div > 0.0)   And (string_Div < 0.";
 if ((((double)(Double.parseDouble(_string_div))>0.0) && ((double)(Double.parseDouble(_string_div))<0.5))) { 
- //BA.debugLineNum = 202;BA.debugLine="Timers(i).Color = 0xFF474147";
+ //BA.debugLineNum = 212;BA.debugLine="Timers(i).Color = 0xFF474147";
 mostCurrent._timers[_i].setColor((int) (0xff474147));
  };
- //BA.debugLineNum = 209;BA.debugLine="Contador_Is_Finished(i) = 0";
+ //BA.debugLineNum = 219;BA.debugLine="Contador_Is_Finished(i) = 0";
 _contador_is_finished[_i] = (int) (0);
- //BA.debugLineNum = 210;BA.debugLine="Try";
-try { //BA.debugLineNum = 213;BA.debugLine="If string_Div <> 0.0 Then";
+ //BA.debugLineNum = 220;BA.debugLine="Try";
+try { //BA.debugLineNum = 223;BA.debugLine="If string_Div <> 0.0 Then";
 if ((_string_div).equals(BA.NumberToString(0.0)) == false) { 
- //BA.debugLineNum = 214;BA.debugLine="Timers(i).Text = NumberFormat2(string_Div,3";
+ //BA.debugLineNum = 224;BA.debugLine="Timers(i).Text = NumberFormat2(string_Div,3";
 mostCurrent._timers[_i].setText((Object)(anywheresoftware.b4a.keywords.Common.NumberFormat2((double)(Double.parseDouble(_string_div)),(int) (3),(int) (1),(int) (1),anywheresoftware.b4a.keywords.Common.False)+" 5EG"));
  };
  } 
        catch (Exception e27) {
-			processBA.setLastException(e27); //BA.debugLineNum = 219;BA.debugLine="Log(LastException)";
+			processBA.setLastException(e27); //BA.debugLineNum = 229;BA.debugLine="Log(LastException)";
 anywheresoftware.b4a.keywords.Common.Log(BA.ObjectToString(anywheresoftware.b4a.keywords.Common.LastException(mostCurrent.activityBA)));
  };
  }else {
- //BA.debugLineNum = 224;BA.debugLine="Contador_Is_Finished(i) = Contador_Is_Finishe";
+ //BA.debugLineNum = 234;BA.debugLine="Contador_Is_Finished(i) = Contador_Is_Finishe";
 _contador_is_finished[_i] = (int) (_contador_is_finished[_i]+1);
- //BA.debugLineNum = 226;BA.debugLine="If Contador_Is_Finished(i) > 2 Then";
+ //BA.debugLineNum = 236;BA.debugLine="If Contador_Is_Finished(i) > 2 Then";
 if (_contador_is_finished[_i]>2) { 
- //BA.debugLineNum = 228;BA.debugLine="Contador_Is_Finished(i) = 0";
+ //BA.debugLineNum = 238;BA.debugLine="Contador_Is_Finished(i) = 0";
 _contador_is_finished[_i] = (int) (0);
- //BA.debugLineNum = 230;BA.debugLine="Dim Time_To_Check As Double = Timers(i).Text";
+ //BA.debugLineNum = 240;BA.debugLine="Dim Time_To_Check As Double = Timers(i).Text";
 _time_to_check = (double)(Double.parseDouble(mostCurrent._timers[_i].getText().substring((int) (0),mostCurrent._timers[_i].getText().indexOf(" "))));
- //BA.debugLineNum = 231;BA.debugLine="If Time_To_Check <> 0.0 Then";
+ //BA.debugLineNum = 241;BA.debugLine="If Time_To_Check <> 0.0 Then";
 if (_time_to_check!=0.0) { 
- //BA.debugLineNum = 232;BA.debugLine="If i > 10 Then";
+ //BA.debugLineNum = 242;BA.debugLine="If i > 10 Then";
 if (_i>10) { 
- //BA.debugLineNum = 235;BA.debugLine="If  (((Time_To_Check = Time_To_Check_Radio_";
+ //BA.debugLineNum = 245;BA.debugLine="If  (((Time_To_Check = Time_To_Check_Radio_";
 if ((((_time_to_check==_time_to_check_radio_button2) || (_time_to_check>_time_to_check_radio_button2)) && (_time_to_check<(_time_to_check_radio_button2+(_time_to_check_radio_button2*0.1)) || _time_to_check==(_time_to_check_radio_button2+(_time_to_check_radio_button2*0.1))))) { 
- //BA.debugLineNum = 236;BA.debugLine="Try";
-try { //BA.debugLineNum = 237;BA.debugLine="Timers(i).Color = Colors.Green";
+ //BA.debugLineNum = 246;BA.debugLine="Try";
+try { //BA.debugLineNum = 247;BA.debugLine="Timers(i).Color = Colors.Green";
 mostCurrent._timers[_i].setColor(anywheresoftware.b4a.keywords.Common.Colors.Green);
  } 
        catch (Exception e40) {
-			processBA.setLastException(e40); //BA.debugLineNum = 239;BA.debugLine="Log(LastException)";
+			processBA.setLastException(e40); //BA.debugLineNum = 249;BA.debugLine="Log(LastException)";
 anywheresoftware.b4a.keywords.Common.Log(BA.ObjectToString(anywheresoftware.b4a.keywords.Common.LastException(mostCurrent.activityBA)));
  };
  }else {
- //BA.debugLineNum = 243;BA.debugLine="Try";
-try { //BA.debugLineNum = 244;BA.debugLine="Timers(i).Color = Colors.Red";
+ //BA.debugLineNum = 253;BA.debugLine="Try";
+try { //BA.debugLineNum = 254;BA.debugLine="Timers(i).Color = Colors.Red";
 mostCurrent._timers[_i].setColor(anywheresoftware.b4a.keywords.Common.Colors.Red);
  } 
        catch (Exception e46) {
-			processBA.setLastException(e46); //BA.debugLineNum = 246;BA.debugLine="Log(LastException)";
+			processBA.setLastException(e46); //BA.debugLineNum = 256;BA.debugLine="Log(LastException)";
 anywheresoftware.b4a.keywords.Common.Log(BA.ObjectToString(anywheresoftware.b4a.keywords.Common.LastException(mostCurrent.activityBA)));
  };
  };
  }else {
- //BA.debugLineNum = 253;BA.debugLine="If  (((Time_To_Check = Time_To_Check_Radio_";
+ //BA.debugLineNum = 263;BA.debugLine="If  (((Time_To_Check = Time_To_Check_Radio_";
 if ((((_time_to_check==_time_to_check_radio_button) || (_time_to_check>_time_to_check_radio_button)) && (_time_to_check<(_time_to_check_radio_button+(_time_to_check_radio_button*0.1)) || _time_to_check==(_time_to_check_radio_button+(_time_to_check_radio_button*0.1))))) { 
- //BA.debugLineNum = 254;BA.debugLine="Try";
-try { //BA.debugLineNum = 255;BA.debugLine="Timers(i).Color = Colors.Green";
+ //BA.debugLineNum = 264;BA.debugLine="Try";
+try { //BA.debugLineNum = 265;BA.debugLine="Timers(i).Color = Colors.Green";
 mostCurrent._timers[_i].setColor(anywheresoftware.b4a.keywords.Common.Colors.Green);
  } 
        catch (Exception e54) {
-			processBA.setLastException(e54); //BA.debugLineNum = 257;BA.debugLine="Log(LastException)";
+			processBA.setLastException(e54); //BA.debugLineNum = 267;BA.debugLine="Log(LastException)";
 anywheresoftware.b4a.keywords.Common.Log(BA.ObjectToString(anywheresoftware.b4a.keywords.Common.LastException(mostCurrent.activityBA)));
  };
  }else {
- //BA.debugLineNum = 261;BA.debugLine="Try";
-try { //BA.debugLineNum = 262;BA.debugLine="Timers(i).Color = Colors.Red";
+ //BA.debugLineNum = 271;BA.debugLine="Try";
+try { //BA.debugLineNum = 272;BA.debugLine="Timers(i).Color = Colors.Red";
 mostCurrent._timers[_i].setColor(anywheresoftware.b4a.keywords.Common.Colors.Red);
  } 
        catch (Exception e60) {
-			processBA.setLastException(e60); //BA.debugLineNum = 264;BA.debugLine="Log(LastException)";
+			processBA.setLastException(e60); //BA.debugLineNum = 274;BA.debugLine="Log(LastException)";
 anywheresoftware.b4a.keywords.Common.Log(BA.ObjectToString(anywheresoftware.b4a.keywords.Common.LastException(mostCurrent.activityBA)));
  };
  };
@@ -520,7 +530,7 @@ anywheresoftware.b4a.keywords.Common.Log(BA.ObjectToString(anywheresoftware.b4a.
  };
  } 
        catch (Exception e68) {
-			processBA.setLastException(e68); //BA.debugLineNum = 274;BA.debugLine="Log(LastException)";
+			processBA.setLastException(e68); //BA.debugLineNum = 284;BA.debugLine="Log(LastException)";
 anywheresoftware.b4a.keywords.Common.Log(BA.ObjectToString(anywheresoftware.b4a.keywords.Common.LastException(mostCurrent.activityBA)));
  };
  };
@@ -528,16 +538,16 @@ anywheresoftware.b4a.keywords.Common.Log(BA.ObjectToString(anywheresoftware.b4a.
  };
  }
 };
- //BA.debugLineNum = 282;BA.debugLine="End Sub";
+ //BA.debugLineNum = 292;BA.debugLine="End Sub";
 return "";
 }
 public static String  _button1_click() throws Exception{
- //BA.debugLineNum = 165;BA.debugLine="Sub Button1_Click";
- //BA.debugLineNum = 167;BA.debugLine="mensaje_Out=\"a\"";
+ //BA.debugLineNum = 175;BA.debugLine="Sub Button1_Click";
+ //BA.debugLineNum = 177;BA.debugLine="mensaje_Out=\"a\"";
 _mensaje_out = "a";
- //BA.debugLineNum = 168;BA.debugLine="Write_In_Arduino(mensaje_Out)";
+ //BA.debugLineNum = 178;BA.debugLine="Write_In_Arduino(mensaje_Out)";
 _write_in_arduino(_mensaje_out);
- //BA.debugLineNum = 169;BA.debugLine="End Sub";
+ //BA.debugLineNum = 179;BA.debugLine="End Sub";
 return "";
 }
 public static String  _globals() throws Exception{
@@ -583,6 +593,8 @@ mostCurrent._timers[i0] = new anywheresoftware.b4a.objects.LabelWrapper();
 ;
  //BA.debugLineNum = 37;BA.debugLine="Dim Last_Msg As String";
 mostCurrent._last_msg = "";
+ //BA.debugLineNum = 38;BA.debugLine="Dim dev As Int";
+_dev = 0;
  //BA.debugLineNum = 42;BA.debugLine="Timers(0) = Timer_1";
 mostCurrent._timers[(int) (0)] = mostCurrent._timer_1;
  //BA.debugLineNum = 43;BA.debugLine="Timers(1) = Timer_2";
@@ -686,14 +698,14 @@ return "";
 }
 public static String  _label_click() throws Exception{
 anywheresoftware.b4a.objects.LabelWrapper _lbl_tag = null;
- //BA.debugLineNum = 158;BA.debugLine="Sub Label_Click";
- //BA.debugLineNum = 159;BA.debugLine="Dim lbl_tag As Label";
+ //BA.debugLineNum = 168;BA.debugLine="Sub Label_Click";
+ //BA.debugLineNum = 169;BA.debugLine="Dim lbl_tag As Label";
 _lbl_tag = new anywheresoftware.b4a.objects.LabelWrapper();
- //BA.debugLineNum = 160;BA.debugLine="lbl_tag = Sender";
+ //BA.debugLineNum = 170;BA.debugLine="lbl_tag = Sender";
 _lbl_tag.setObject((android.widget.TextView)(anywheresoftware.b4a.keywords.Common.Sender(mostCurrent.activityBA)));
- //BA.debugLineNum = 161;BA.debugLine="lbl_tag.Text = lbl_tag.Tag";
+ //BA.debugLineNum = 171;BA.debugLine="lbl_tag.Text = lbl_tag.Tag";
 _lbl_tag.setText(_lbl_tag.getTag());
- //BA.debugLineNum = 162;BA.debugLine="End Sub";
+ //BA.debugLineNum = 172;BA.debugLine="End Sub";
 return "";
 }
 
@@ -723,52 +735,52 @@ _mensaje_out = "";
 return "";
 }
 public static String  _radiobutton3_6s_checkedchange(boolean _checked) throws Exception{
- //BA.debugLineNum = 284;BA.debugLine="Sub RadioButton3_6S_CheckedChange(Checked As Boole";
- //BA.debugLineNum = 285;BA.debugLine="If Checked = True Then";
+ //BA.debugLineNum = 294;BA.debugLine="Sub RadioButton3_6S_CheckedChange(Checked As Boole";
+ //BA.debugLineNum = 295;BA.debugLine="If Checked = True Then";
 if (_checked==anywheresoftware.b4a.keywords.Common.True) { 
- //BA.debugLineNum = 286;BA.debugLine="Time_To_Check_Radio_Button = 3.6";
+ //BA.debugLineNum = 296;BA.debugLine="Time_To_Check_Radio_Button = 3.6";
 _time_to_check_radio_button = 3.6;
  };
- //BA.debugLineNum = 288;BA.debugLine="End Sub";
+ //BA.debugLineNum = 298;BA.debugLine="End Sub";
 return "";
 }
 public static String  _radiobutton3_6s2_checkedchange(boolean _checked) throws Exception{
- //BA.debugLineNum = 303;BA.debugLine="Sub RadioButton3_6S2_CheckedChange(Checked As Bool";
- //BA.debugLineNum = 304;BA.debugLine="If Checked = True Then";
+ //BA.debugLineNum = 313;BA.debugLine="Sub RadioButton3_6S2_CheckedChange(Checked As Bool";
+ //BA.debugLineNum = 314;BA.debugLine="If Checked = True Then";
 if (_checked==anywheresoftware.b4a.keywords.Common.True) { 
- //BA.debugLineNum = 305;BA.debugLine="Time_To_Check_Radio_Button2 = 3.6";
+ //BA.debugLineNum = 315;BA.debugLine="Time_To_Check_Radio_Button2 = 3.6";
 _time_to_check_radio_button2 = 3.6;
  };
- //BA.debugLineNum = 307;BA.debugLine="End Sub";
+ //BA.debugLineNum = 317;BA.debugLine="End Sub";
 return "";
 }
 public static String  _radiobutton36s_checkedchange(boolean _checked) throws Exception{
- //BA.debugLineNum = 289;BA.debugLine="Sub RadioButton36S_CheckedChange(Checked As Boolea";
- //BA.debugLineNum = 290;BA.debugLine="If Checked = True Then";
+ //BA.debugLineNum = 299;BA.debugLine="Sub RadioButton36S_CheckedChange(Checked As Boolea";
+ //BA.debugLineNum = 300;BA.debugLine="If Checked = True Then";
 if (_checked==anywheresoftware.b4a.keywords.Common.True) { 
- //BA.debugLineNum = 291;BA.debugLine="Time_To_Check_Radio_Button = 36";
+ //BA.debugLineNum = 301;BA.debugLine="Time_To_Check_Radio_Button = 36";
 _time_to_check_radio_button = 36;
  };
- //BA.debugLineNum = 293;BA.debugLine="End Sub";
+ //BA.debugLineNum = 303;BA.debugLine="End Sub";
 return "";
 }
 public static String  _radiobutton36s2_checkedchange(boolean _checked) throws Exception{
- //BA.debugLineNum = 297;BA.debugLine="Sub RadioButton36S2_CheckedChange(Checked As Boole";
- //BA.debugLineNum = 298;BA.debugLine="If Checked = True Then";
+ //BA.debugLineNum = 307;BA.debugLine="Sub RadioButton36S2_CheckedChange(Checked As Boole";
+ //BA.debugLineNum = 308;BA.debugLine="If Checked = True Then";
 if (_checked==anywheresoftware.b4a.keywords.Common.True) { 
- //BA.debugLineNum = 299;BA.debugLine="Time_To_Check_Radio_Button2 = 36";
+ //BA.debugLineNum = 309;BA.debugLine="Time_To_Check_Radio_Button2 = 36";
 _time_to_check_radio_button2 = 36;
  };
- //BA.debugLineNum = 301;BA.debugLine="End Sub";
+ //BA.debugLineNum = 311;BA.debugLine="End Sub";
 return "";
 }
 public static String  _write_in_arduino(String _ms) throws Exception{
- //BA.debugLineNum = 144;BA.debugLine="Sub Write_In_Arduino (Ms As String)";
- //BA.debugLineNum = 145;BA.debugLine="Ms = mensaje_Out";
+ //BA.debugLineNum = 154;BA.debugLine="Sub Write_In_Arduino (Ms As String)";
+ //BA.debugLineNum = 155;BA.debugLine="Ms = mensaje_Out";
 _ms = _mensaje_out;
- //BA.debugLineNum = 146;BA.debugLine="astreams.Write(Ms.GetBytes(\"UTF8\"))";
+ //BA.debugLineNum = 156;BA.debugLine="astreams.Write(Ms.GetBytes(\"UTF8\"))";
 _astreams.Write(_ms.getBytes("UTF8"));
- //BA.debugLineNum = 147;BA.debugLine="End Sub";
+ //BA.debugLineNum = 157;BA.debugLine="End Sub";
 return "";
 }
 }

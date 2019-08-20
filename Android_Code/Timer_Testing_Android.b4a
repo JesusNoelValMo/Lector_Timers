@@ -25,7 +25,7 @@ Library4=randomaccessfile
 Library5=stringutils
 @EndOfDesignText@
 #Region  Project Attributes 
-	#ApplicationLabel: B4A Example
+	#ApplicationLabel: Hour Meter 
 	#VersionCode: 1
 	#VersionName: 
 	'SupportedOrientations possible values: unspecified, landscape or portrait.
@@ -61,7 +61,7 @@ Sub Globals
 	Dim Time_To_Check_Radio_Button, Time_To_Check_Radio_Button2 As Double
 	Private Timers(22) As Label 
 	Dim Last_Msg As String
-	
+	Dim dev As Int
 	
 	
 	
@@ -151,7 +151,7 @@ Sub Activity_Create(FirstTime As Boolean)
 		
 		
 		'Msgbox(usb1.DeviceInfo(1), "Device Information 1")	' Ver_2.4
-		Dim dev As Int
+		
 		'dev = usb.Open(115200, 1)		' Ver_2.4
 		dev = usb.Open(115200, 1)		' Ver_2.4
 		''Msgbox(usb.UsbPresent(1),"AS")	'
@@ -163,6 +163,16 @@ Sub Activity_Create(FirstTime As Boolean)
 		End If
 	Else
 		usb.RequestPermission(1)  ' Ver_2.4
+		Dim dev As Int
+		'dev = usb.Open(115200, 1)		' Ver_2.4
+		dev = usb.Open(115200, 1)		' Ver_2.4
+		''Msgbox(usb.UsbPresent(1),"AS")	'
+	
+		If dev <> usb.USB_NONE Then	
+			 astreams.Initialize(usb.GetInputStream,usb.GetOutputStream,"Astreams")
+		Else
+			Log("Error opening USB port 1")
+		End If
 	End If
 
 End Sub
@@ -220,11 +230,12 @@ Sub Astreams_NewData (Buffer() As Byte)
 						'val = command.SubString(command.IndexOf(ID_arr(i))+1)	
 					'End If
 					
-					string_Div =  (val / 10)
-					Last_Msg = NumberFormat2(string_Div,3,1,1,False) & " 5EG"
+					string_Div =  (val / 100) 
+					Last_Msg = NumberFormat2(string_Div,3,2,2,False) & " 5EG"
+					
 					
 				If Timers(i).Text <> Last_Msg Then 
-					If ((string_Div > 0.0)   And (string_Div < 0.5)) Then 
+					If ((string_Div > 0.00)   And (string_Div < 0.50)) Then 
 						Timers(i).Color = 0xFF474147
 						
 					End If
@@ -236,8 +247,8 @@ Sub Astreams_NewData (Buffer() As Byte)
 						Try
 							''BUG CON EL ULTIMO VALOR NO SE MOSTRARIA NADA PORQUE SE INTENTA PASAR A LA SIGUIENTE POSICION DEL ARRAY ID_ARR
 							'NO HAY NADA DESPUES DE V
-						If string_Div <> 0.0 Then 
-							Timers(i).Text = NumberFormat2(string_Div,3,1,1,False) & " 5EG"
+						If string_Div <> 0.00 Then 
+							Timers(i).Text = NumberFormat2(string_Div,3,2,2,False) & " 5EG"
 						End If
 						
 							
@@ -249,7 +260,7 @@ Sub Astreams_NewData (Buffer() As Byte)
 					'para asegurarse de que no fue un error en el buffer
 					Contador_Is_Finished(i) = Contador_Is_Finished(i) + 1
 					'si se repite varias veces el mismo mensaje, se toma como proceso terminado
-				 	If Contador_Is_Finished(i) > 2 Then 
+				 	If Contador_Is_Finished(i) > 5 Then 
 						'Se evalua si el valor del timer es el requerido
 						Contador_Is_Finished(i) = 0
 						'Grupo 1
@@ -258,7 +269,7 @@ Sub Astreams_NewData (Buffer() As Byte)
 						If i > 10 Then 
 							
 								
-							If  (((Time_To_Check = Time_To_Check_Radio_Button2) Or (Time_To_Check > Time_To_Check_Radio_Button2)) And (Time_To_Check < (Time_To_Check_Radio_Button2 + (Time_To_Check_Radio_Button2 * 0.1 )) Or Time_To_Check = (Time_To_Check_Radio_Button2 + (Time_To_Check_Radio_Button2 * 0.1 )))     )Then 
+							If  (((Time_To_Check = Time_To_Check_Radio_Button2) Or (Time_To_Check > Time_To_Check_Radio_Button2)) And (Time_To_Check < (Time_To_Check_Radio_Button2 + (Time_To_Check_Radio_Button2 * 0.10 )) Or Time_To_Check = (Time_To_Check_Radio_Button2 + (Time_To_Check_Radio_Button2 * 0.1 )))     )Then 
 								Try
 									Timers(i).Color = Colors.Green
 								Catch
@@ -276,7 +287,7 @@ Sub Astreams_NewData (Buffer() As Byte)
 						
 						Else 
 							'Dim Time_To_Check As Double = Timers(i).Text.SubString2(0, Timers(i).Text.IndexOf(" "))
-							If  (((Time_To_Check = Time_To_Check_Radio_Button) Or (Time_To_Check > Time_To_Check_Radio_Button)) And (Time_To_Check < (Time_To_Check_Radio_Button + (Time_To_Check_Radio_Button * 0.1 )) Or Time_To_Check = (Time_To_Check_Radio_Button + (Time_To_Check_Radio_Button * 0.1 )))       )Then 
+							If  (((Time_To_Check = Time_To_Check_Radio_Button) Or (Time_To_Check > Time_To_Check_Radio_Button)) And (Time_To_Check < (Time_To_Check_Radio_Button + (Time_To_Check_Radio_Button * 0.10 )) Or Time_To_Check = (Time_To_Check_Radio_Button + (Time_To_Check_Radio_Button * 0.1 )))       )Then 
 								Try
 									Timers(i).Color = Colors.Green
 								Catch
@@ -309,7 +320,7 @@ End Sub
 
 Sub RadioButton3_6S_CheckedChange(Checked As Boolean)
 	If Checked = True Then 
-		Time_To_Check_Radio_Button = 3.6
+		Time_To_Check_Radio_Button = 3.60
 	End If
 End Sub
 Sub RadioButton36S_CheckedChange(Checked As Boolean)
@@ -328,6 +339,6 @@ End Sub
 
 Sub RadioButton3_6S2_CheckedChange(Checked As Boolean)
 	If Checked = True Then 
-		Time_To_Check_Radio_Button2 = 3.6
+		Time_To_Check_Radio_Button2 = 3.60
 	End If	
 End Sub

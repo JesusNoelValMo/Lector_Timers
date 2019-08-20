@@ -13,12 +13,12 @@
 	    android:anyDensity="true"/>
 	<application
 		android:icon="@drawable/icon"
-		android:label="B4A Example">
+		android:label="Hour Meter">
 		<activity
 			android:windowSoftInputMode="stateHidden"
 			android:launchMode="singleTop"
 			android:name=".main"
-			android:label="B4A Example"
+			android:label="Hour Meter"
 			android:screenOrientation="landscape">
 			<intent-filter>
 			   <action android:name="android.intent.action.MAIN" />

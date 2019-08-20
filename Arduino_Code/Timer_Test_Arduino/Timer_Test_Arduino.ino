@@ -5,8 +5,10 @@ int global_count, i;
 //Grupo de pines para timers
 
 
-int Group1_PinTimerDev[11] = {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32};
-int Trigger_Test_Pin_1 = 33;
+//int Group1_PinTimerDev[11] = {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32};
+int Group1_PinTimerDev[11] = {3, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32};
+//int Trigger_Test_Pin_1 = 33;
+int Trigger_Test_Pin_1 = 2;
 int Group2_PinTimerDev[11] = {34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44};
 String ID_Char[22] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v"};
 int Trigger_Test_Pin_2 = 45;
@@ -37,7 +39,7 @@ class Timer_device
     //   Serial.println(currentTime);
       // Serial.println(NextTimeToCheck);
         Pin_Timer_Status = digitalRead(Pin_Timer);
-        if (Pin_Timer_Status == HIGH)
+        if (Pin_Timer_Status == LOW)
         {
           count++;
          // Serial.println("  ID" + ID_Char[ID_timer]  +":"+ String(count));
@@ -77,7 +79,7 @@ void setup() {
 
 
 void loop() {
-  if(digitalRead(Trigger_Test_Pin_1) == false){
+  if(digitalRead(Trigger_Test_Pin_1) == true){
     if (ResetCountT1 == true){
       for(i = 0; i <= 10; i++){
         
@@ -90,13 +92,13 @@ void loop() {
       if (TDevices1[i].is_finished == false){
         Send_Flag = true;
       
-        TDevices1[i].Read_n_sum_count(Group1_PinTimerDev[i], 100, i); 
+        TDevices1[i].Read_n_sum_count(Group1_PinTimerDev[i], 10, i); 
       }
     }
   }
   else{
     ResetCountT1 = true;
-    delay(100);
+    delay(10);
   }
 
 
@@ -104,7 +106,7 @@ void loop() {
 
 
   
-  if(digitalRead(Trigger_Test_Pin_2) == false){
+  if(digitalRead(Trigger_Test_Pin_2) == true){
     if (ResetCountT2 == true){
       for(i = 0; i <= 10; i++){
         
@@ -117,15 +119,15 @@ void loop() {
       if (TDevices2[i].is_finished == false){
         Send_Flag = true;
         
-        TDevices2[i].Read_n_sum_count(Group2_PinTimerDev[i], 100, (i + 11)); 
+        TDevices2[i].Read_n_sum_count(Group2_PinTimerDev[i], 10, (i + 11)); 
       }
     }
   }
   else{
     ResetCountT2 = true;
-    delay(100);
+   // delay(100);
   }
-  if((digitalRead(Trigger_Test_Pin_2) == true) && (digitalRead(Trigger_Test_Pin_1) == true)){
+  if((digitalRead(Trigger_Test_Pin_2) == false) && (digitalRead(Trigger_Test_Pin_1) == false)){
     Send_Flag = false;
   }
 
