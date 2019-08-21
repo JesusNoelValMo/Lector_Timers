@@ -6,9 +6,9 @@ int global_count, i;
 
 
 //int Group1_PinTimerDev[11] = {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32};
-int Group1_PinTimerDev[11] = {3, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32};
+int Group1_PinTimerDev[11] = {22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32};
 //int Trigger_Test_Pin_1 = 33;
-int Trigger_Test_Pin_1 = 2;
+int Trigger_Test_Pin_1 = 33;
 int Group2_PinTimerDev[11] = {34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44};
 String ID_Char[22] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v"};
 int Trigger_Test_Pin_2 = 45;
@@ -98,7 +98,7 @@ void loop() {
   }
   else{
     ResetCountT1 = true;
-    //delay(10);
+   // delay(10);
   }
 
 
@@ -125,7 +125,7 @@ void loop() {
   }
   else{
     ResetCountT2 = true;
-    //delay(10);
+   // delay(10);
   }
   if((digitalRead(Trigger_Test_Pin_2) == false) && (digitalRead(Trigger_Test_Pin_1) == false)){
     Send_Flag = false;

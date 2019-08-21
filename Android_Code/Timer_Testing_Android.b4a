@@ -62,7 +62,7 @@ Sub Globals
 	Private Timers(22) As Label 
 	Dim Last_Msg As String
 	Dim dev As Int
-	
+	Public RadioButton3_6S, RadioButton36S, RadioButton3_6S2, RadioButton36S2 As RadioButton
 	
 	
 	Timers(0) = Timer_1
@@ -102,9 +102,9 @@ Sub Globals
 	ID_arr(8) = "i"
 	ID_arr(9) = "j"
 	ID_arr(10) = "k"
+	
+	
 	ID_arr(11) = "l"
-	
-	
 	ID_arr(12) = "m"
 	ID_arr(13) = "n"
 	ID_arr(14) = "o"
@@ -229,16 +229,71 @@ Sub Astreams_NewData (Buffer() As Byte)
 					'Else 
 						'val = command.SubString(command.IndexOf(ID_arr(i))+1)	
 					'End If
+					If (i < 11) Then
+						 
 					
-					string_Div =  (val / 100) 
+						If RadioButton3_6S.Checked = True Then 
+							string_Div =  (val / 100) +.30
+						
+						End If
+						If RadioButton36S.Checked = True Then 
+							string_Div =  (val / 100) +4
+						
+						End If
+					Else 
+						If RadioButton3_6S2.Checked = True Then 
+							string_Div =  (val / 100) +.30
+						
+						End If
+						If RadioButton36S2.Checked = True Then 
+							string_Div =  (val / 100) +4
+						
+						End If
+					End If
+					
+				
+					
+					
+					
+					
 					Last_Msg = NumberFormat2(string_Div,3,2,2,False) & " 5EG"
 					
 					
 				If Timers(i).Text <> Last_Msg Then 
-					If ((string_Div > 0.00)   And (string_Div < 0.50)) Then 
+					If (i < 11) Then
+						 
+					
+						If RadioButton3_6S.Checked = True Then 
+							If ((string_Div > 0.00)   And (string_Div < 0.50)) Then 
+								Timers(i).Color = 0xFF474147
+						
+							End If
+						
+						End If
+						If RadioButton36S.Checked = True Then 
+								If ((string_Div > 0.00)   And (string_Div < 4.5)) Then 
 						Timers(i).Color = 0xFF474147
 						
 					End If
+						
+						End If
+					Else 
+						If RadioButton3_6S2.Checked = True Then 
+							If ((string_Div > 0.00)   And (string_Div < 0.50)) Then 
+								Timers(i).Color = 0xFF474147
+						
+							End If
+						
+						End If
+						If RadioButton36S2.Checked = True Then 
+							If ((string_Div > 0.00)   And (string_Div < 4.50)) Then 
+								Timers(i).Color = 0xFF474147
+						
+							End If
+						
+						End If
+					End If
+				
 				'If Timers(i).Text <> Last_Msg Then 
 					'Si no se repite el contenido, el texto del label sera el valor que se recibió
 					' Se toma el valor del index donde aparece el ID hasta donde aparece el siguiente ID
@@ -247,9 +302,9 @@ Sub Astreams_NewData (Buffer() As Byte)
 						Try
 							''BUG CON EL ULTIMO VALOR NO SE MOSTRARIA NADA PORQUE SE INTENTA PASAR A LA SIGUIENTE POSICION DEL ARRAY ID_ARR
 							'NO HAY NADA DESPUES DE V
-						If string_Div <> 0.00 Then 
+						'If string_Div <> 0.00 Then 
 							Timers(i).Text = NumberFormat2(string_Div,3,2,2,False) & " 5EG"
-						End If
+						'End If
 						
 							
 						Catch
@@ -265,7 +320,7 @@ Sub Astreams_NewData (Buffer() As Byte)
 						Contador_Is_Finished(i) = 0
 						'Grupo 1
 						Dim Time_To_Check As Double = Timers(i).Text.SubString2(0, Timers(i).Text.IndexOf(" "))
-						If Time_To_Check <> 0.0 Then 
+						'If Time_To_Check <> 0.0 Then 
 						If i > 10 Then 
 							
 								
@@ -303,7 +358,7 @@ Sub Astreams_NewData (Buffer() As Byte)
 							
 						End If	
 						End If 
-					End If		
+					'End If		
 							
 					End If 
 				End If 
